@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Engine.ViewModels;
 
 namespace WPFUI
 {
@@ -20,9 +21,31 @@ namespace WPFUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private GameSession _gameSession;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _gameSession = new GameSession();
+
+            DataContext = _gameSession;
+        }
+
+        private void OnClick_MoveNorth(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void OnClick_MoveWest(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void OnClick_MoveEast(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void OnClick_MoveSouth(object sender, RoutedEventArgs e)
+        {
         }
     }
 }
