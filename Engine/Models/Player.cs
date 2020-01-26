@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Engine;
+
+
 
 namespace Engine.Models
 {
-    public class Player : INotifyPropertyChanged
+    public class Player : BaseNotificationClass
     {
         private string _name;
         private string _characterClass;
@@ -22,7 +26,7 @@ namespace Engine.Models
             set
             {
                 _name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged(nameof(Name));
             }
         }
         public string CharacterClass
@@ -31,7 +35,7 @@ namespace Engine.Models
             set
             {
                 _characterClass = value;
-                OnPropertyChanged("CharacterClass");
+                OnPropertyChanged(nameof(CharacterClass));
             }
         }
         public int HitPoints
@@ -40,13 +44,17 @@ namespace Engine.Models
             set
             {
                 _hitPoints = value;
-                OnPropertyChanged("HitPoints");
+                OnPropertyChanged(nameof(HitPoints));
             }
         }
-        public int ExperiencePoints {
+        public int ExperiencePoints
+        {
             get { return _experiencePoints; }
-            set { _experiencePoints = value;
-                OnPropertyChanged("ExperiencePoints"); }
+            set
+            {
+                _experiencePoints = value;
+                OnPropertyChanged(nameof(ExperiencePoints));
+            }
         }
         public int Level
         {
@@ -54,7 +62,7 @@ namespace Engine.Models
             set
             {
                 _level = value;
-                OnPropertyChanged("Level");
+                OnPropertyChanged(nameof(Level));
             }
         }
         public int Gold
@@ -63,16 +71,41 @@ namespace Engine.Models
             set
             {
                 _gold = value;
-                OnPropertyChanged("Gold");
+                OnPropertyChanged(nameof(Gold));
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableCollection<GameItem> Inventory { get; set; }
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        public List<GameItem> Weapons => Inventory.Where(i => i is Weapon).ToList();
+
+        public ObservableCollection<QuestStatus> Quests { get; set; }
+
+        public Player()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Inventory = new ObservableCollection<GameItem>();
+            Quests = new ObservableCollection<QuestStatus>();
         }
 
+        public void AddItemToInventory(GameItem item)
+        {
+            Inventory.Add(item);
+
+            OnPropertyChanged(nameof(Weapons));
+
+            if (Weapons != null)
+            {
+                foreach (Weapon weapon in Weapons)
+                {
+                    Console.WriteLine($"The weapon {weapon.Name} is available");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No weapons in Weapons");
+            }
+
+
+        }
     }
 }
